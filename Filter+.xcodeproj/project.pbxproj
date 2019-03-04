@@ -17,6 +17,7 @@
 		A536AF782227ECC200750284 /* Filter_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A536AF772227ECC200750284 /* Filter_UITests.swift */; };
 		A536AF882227ED6C00750284 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A536AF872227ED6C00750284 /* FilterViewController.swift */; };
 		A536AF8F22285C7400750284 /* HandlerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A536AF8E22285C7400750284 /* HandlerViewController.swift */; };
+		A54A0F1E222C588900960BEE /* FiltersGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54A0F1D222C588900960BEE /* FiltersGroup.swift */; };
 		A5E8D0DF222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E8D0DE222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift */; };
 		A5E8D0E3222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E8D0E2222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift */; };
 		A5F6B92B222B040D009373FB /* ChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F6B92A222B040D009373FB /* ChildViewController.swift */; };
@@ -60,6 +61,7 @@
 		A536AF792227ECC200750284 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A536AF872227ED6C00750284 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		A536AF8E22285C7400750284 /* HandlerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlerViewController.swift; sourceTree = "<group>"; };
+		A54A0F1D222C588900960BEE /* FiltersGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersGroup.swift; sourceTree = "<group>"; };
 		A5E8D0DE222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterEffectsControlCollectionViewCell.swift; sourceTree = "<group>"; };
 		A5E8D0E2222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorEffecsControlCollectionViewCell.swift; sourceTree = "<group>"; };
 		A5F6B92A222B040D009373FB /* ChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +147,8 @@
 		A536AF562227ECC100750284 /* Filter+ */ = {
 			isa = PBXGroup;
 			children = (
+				A54A0F1C222C585300960BEE /* Filters_ */,
+				A5E8D0E4222C2B3800F518E9 /* Filters */,
 				A536AF862227ED5400750284 /* Controller */,
 				A536AF572227ECC100750284 /* AppDelegate.swift */,
 				A536AF5B2227ECC100750284 /* Main.storyboard */,
@@ -183,6 +187,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		A54A0F1C222C585300960BEE /* Filters_ */ = {
+			isa = PBXGroup;
+			children = (
+				A54A0F1D222C588900960BEE /* FiltersGroup.swift */,
+			);
+			path = Filters_;
+			sourceTree = "<group>";
+		};
 		A5E8D0DD222C023500F518E9 /* FIlterEffectsControlCollectionCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +209,13 @@
 				A5E8D0E2222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift */,
 			);
 			path = ColorFilterEffectsCollectionCell;
+			sourceTree = "<group>";
+		};
+		A5E8D0E4222C2B3800F518E9 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Filters;
 			sourceTree = "<group>";
 		};
 		A5F6B929222B03F8009373FB /* Child Container Controller */ = {
@@ -441,6 +460,7 @@
 			files = (
 				A5E8D0E3222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift in Sources */,
 				A536AF882227ED6C00750284 /* FilterViewController.swift in Sources */,
+				A54A0F1E222C588900960BEE /* FiltersGroup.swift in Sources */,
 				A536AF8F22285C7400750284 /* HandlerViewController.swift in Sources */,
 				A536AF582227ECC100750284 /* AppDelegate.swift in Sources */,
 				A5F6B92B222B040D009373FB /* ChildViewController.swift in Sources */,

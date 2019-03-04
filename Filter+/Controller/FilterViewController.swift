@@ -18,14 +18,28 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
     let buttonScheme = MDCButtonScheme()
     var userSelctedImage = UIImage()
     
+    //Effects File Link
+    let sepiaFilterClass = Sepia()
     
     //Images Outlets
     @IBOutlet weak var backgroundImageView: UIImageView!
     
+    
+    
     @IBOutlet weak var imageView: UIImageView!
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-
+       
+        backgroundImageView.image = imageView.image
+        if imageView.image != nil {
+            print("ImageView\(String(describing: imageView.image!))")
+        } else {
+            print("Empty image")
+        }
+        
+        imagePlaceHolder.isHidden = true
         // Do any additional setup after loading the view.
         buttonSetup()
         ImageBackgroundHandler()
@@ -57,46 +71,6 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
 //Text Placeholder Outlet
     @IBOutlet weak var imagePlaceHolder: UILabel!
     
-//Slider Labels Outlets
-    @IBOutlet weak var redSliderLabel: UILabel!
-    @IBOutlet weak var greenSliderLabel: UILabel!
-    @IBOutlet weak var blueSliderLabel: UILabel!
-//Slider Button Outlets
-    @IBOutlet weak var blueSliderOutlet: UISlider!
-    @IBOutlet weak var greenSliderOutlet: UISlider!
-    @IBOutlet weak var redSliderOutlet: UISlider!
-    
-    
-    //Slider Actions
-    @IBAction func redSlider(_ sender: UISlider) {
-        redSliderLabel.text = String((redSliderOutlet.value))
-        
-    }
-    
-    @IBAction func greenSlider(_ sender: UISlider) {
-        greenSliderLabel.text = String(greenSliderOutlet.value)
-        
-    }
-    
-    @IBAction func blueSlider(_ sender: UISlider) {
-        blueSliderLabel.text = String(blueSliderOutlet.value)
-        
-    }
-    
-    
-    
-    //Camera Action
-    @IBAction func cameraButton(_ sender: UIBarButtonItem) {
-        imagePlaceHolder.isHidden = true
-        cameraPressed()
-    }
-    
-    
-    @IBAction func libraryButton(_ sender: UIBarButtonItem) {
-          imagePlaceHolder.isHidden = true
-        selectImageFromLibrary()
-        
-    }
     
     @IBAction func optionsButton(_ sender: MDCFloatingButton) {
         imagePlaceHolder.isHidden = true
@@ -122,7 +96,7 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
     @IBAction func shareButtonPressed(_ sender: UIBarButtonItem) {
     
         if imageView.image != nil {
-                convertImage()
+               // convertImage()
                //Sharing Options
 //            UIGraphicsBeginImageContext(imageView.frame.size)
 //            imageView.layer.render(in: UIGraphicsGetCurrentContext()!)
@@ -132,7 +106,15 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
 //            if let image = editted.im {
 //                let vc = UIActivityViewController(activityItems: [image], applicationActivities: [])
 //                present(vc, animated: true)
+            
 //            }
+            
+            let sepiaFIlteredImage = sepiaFilterClass.applySepiaFIlter(image: CIImage(image: imageView.image!)!)
+           
+            /////////
+            let ciContext = CIContext(options: nil)
+            self.imageView.contentMode = UIView.ContentMode.scaleAspectFit
+             imageView.image = sepiaFIlteredImage
              print("Image Shared")
         }
             
@@ -155,7 +137,7 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
 
             if  let gradientImage = CIImage(image: self.imageView.image!) {
 
-                let finalImage = gradientImage.applyingFilter("CIBloom", parameters: [kCIInputRadiusKey: 8, kCIInputIntensityKey: 1.25])
+                 _ = gradientImage.applyingFilter("CIBloom", parameters: [kCIInputRadiusKey: 8, kCIInputIntensityKey: 1.25])
 
             //    let images = UIImage(ciImage: finalImage.outputImage)
                 
@@ -169,6 +151,9 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
 
 
     }
+    
+    //COntroller Connections
+    
     
     
 }
