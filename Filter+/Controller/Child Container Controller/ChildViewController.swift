@@ -22,6 +22,7 @@ class ChildViewController: UIViewController {
     
     //Effects Controller Link
     let sepiaFilterClass = Sepia()
+    var sepiaOutput = UIImage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,34 +51,35 @@ class ChildViewController: UIViewController {
     @IBAction func sepiaButtonPressed(_ sender: Any) {
         print("Sepia Button Pressed oo")
         
-//         let image = CIImage(image: UIImage(named: "sammy")!)!
-//
-//
-//        if let image = filterVC.imageView.image {
-//            let sepiaFilteredImage =  sepiaFilterClass.applySepiaFIlter(image: CIImage(image: image)!)
-//            print("Sepia Image: \(sepiaFilteredImage)")
-//            self.filterVC.imageView.image = sepiaFilteredImage
-//        }
-//        else {
-//            print("NO image found")
-//        }
-        //        let imageViewImage = self.filterVC.imageView.image
-        //        let image = CIImage(image: imageViewImage!)
-
         let image = CIImage(image: UIImage(named: "sammy")!)
         
         let sepiaFilteredImage = image?.applyingFilter("CISepiaTone", parameters: [kCIInputIntensityKey: 0.5])
         
-        let finalImage = UIImage(ciImage: sepiaFilteredImage!)
+        let finalImage = convert(cimage: sepiaFilteredImage!)
+        
+        sepiaOutput = finalImage
+        
+        //let finalImage = UIImage(ciImage: sepiaFilteredImage!)
         self.filterVC.imageView.image = finalImage
         
-//        let sepiaFilteredImage = sepiaFilterClass.appySepiaFIlter(image: image!)
-//         print("Sepia Image: \(sepiaFilteredImage)")
-//        self.filterVC.imageView.image = sepiaFilteredImage
-//
     }
     
+    // MARK: - convert image
+    func convert(cimage:CIImage) -> UIImage
+    {
+        let context:CIContext = CIContext.init(options: nil)
+        let cgImage:CGImage = context.createCGImage(cimage, from: cimage.extent)!
+        let image:UIImage = UIImage.init(cgImage: cgImage)
+        
+        return image
+        
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! FilterViewController
+        vc.imageView.image = sepiaOutput
+        
+    }
     
 
 }
@@ -90,6 +92,7 @@ class ChildViewController: UIViewController {
 */
 
 extension ChildViewController : UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 2
     }
@@ -111,14 +114,10 @@ extension ChildViewController : UICollectionViewDelegate, UICollectionViewDataSo
         else  {
             return UICollectionViewCell()
         }
-      
-
     
     }
     
-    
-   
-    
+
     
   
     

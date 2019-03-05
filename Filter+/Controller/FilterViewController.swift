@@ -9,78 +9,63 @@
 import UIKit
 import MaterialComponents
 
-class FilterViewController: HandlerViewController, UINavigationControllerDelegate {
-
-    //MARK: VAriables Setup
+class FilterViewController: UIViewController, UINavigationControllerDelegate {
     
-    //Button
+    //MARK: Variables Setup
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    //MDC FLoating Button Configuration
     let floatButton = MDCFloatingButton()
     let buttonScheme = MDCButtonScheme()
     var userSelctedImage = UIImage()
     
-    //Effects File Link
+    //Class Connections
     let sepiaFilterClass = Sepia()
+    let convertImage = ImageConverter()
     
     //Images Outlets
     @IBOutlet weak var backgroundImageView: UIImageView!
-    
-    
-    
     @IBOutlet weak var imageView: UIImageView!
     
+    //Life Cycle
+    
     override func viewDidLoad() {
+        viewDidLayoutSubviews()
         
-        super.viewDidLoad()
-       
+        scrollView.contentSize.width = 500
         backgroundImageView.image = imageView.image
-        if imageView.image != nil {
-            print("ImageView\(String(describing: imageView.image!))")
-        } else {
-            print("Empty image")
-        }
         
         imagePlaceHolder.isHidden = true
         // Do any additional setup after loading the view.
         buttonSetup()
         ImageBackgroundHandler()
         
-        //TODO: Should have its own function
-//        let alert = UIAlertController(title: "Choose", message: "", preferredStyle: .alert)
-//        let takePhotoAction = UIAlertAction(title: "Take a photo", style: .default) { (action) in
-//            print("Something hapened")
-//            self.cameraPressed()
-//        }
-//
-//        let selectImageAction = UIAlertAction(title: "Select From Album", style: .default) { (action) in
-//            
-//            print("Another Thing Happened")
-//            
-//            self.selectImageFromLibrary()
-//        }
-//        present(alert, animated: true, completion: nil)
-//        alert.addAction(takePhotoAction)
-//        alert.addAction(selectImageAction)
+        setupView()
+    }
+    
+    //View Methods
+    private func setupView () {
         
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
-//    }
-    
-//Text Placeholder Outlet
+    //Text Placeholder Outlet
     @IBOutlet weak var imagePlaceHolder: UILabel!
     
     
+    //MARK: MDC FLoating Button Action
     @IBAction func optionsButton(_ sender: MDCFloatingButton) {
         imagePlaceHolder.isHidden = true
         
         let alert = UIAlertController(title: "Choose", message: "", preferredStyle: .alert)
+        
+        //Camera Selected Action
         let takePhotoAction = UIAlertAction(title: "Take a photo", style: .default) { (action) in
             print("Something hapened")
             self.cameraPressed()
         }
         
+        //Library Selected Action
         let selectImageAction = UIAlertAction(title: "Select From Album", style: .default) { (action) in
             
             print("Another Thing Happened")
@@ -92,30 +77,26 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
         alert.addAction(selectImageAction)
     }
     
+    //MARK: FIlter Button Actions
+    //Sepia Button
+    @IBAction func sepiaFIlterButtonClicked(_ sender: UIButton) {
+        let image = CIImage(image: imageView.image!)
+        let filteredImage = sepiaFilterClass.applySepiaFIlter(image: image!)
+        let finalImage = convertImage.convertCIImageToUIImage(image: filteredImage)
+        self.imageView.image = finalImage
+    }
+    
+    //Another Button
+    
+    
+    
+    
     //Share Button Method
     @IBAction func shareButtonPressed(_ sender: UIBarButtonItem) {
-    
+        
         if imageView.image != nil {
-               // convertImage()
-               //Sharing Options
-//            UIGraphicsBeginImageContext(imageView.frame.size)
-//            imageView.layer.render(in: UIGraphicsGetCurrentContext()!)
-//            let renderedImage = UIGraphicsGetImageFromCurrentImageContext()
-           
-         
-//            if let image = editted.im {
-//                let vc = UIActivityViewController(activityItems: [image], applicationActivities: [])
-//                present(vc, animated: true)
             
-//            }
             
-            let sepiaFIlteredImage = sepiaFilterClass.applySepiaFIlter(image: CIImage(image: imageView.image!)!)
-           
-            /////////
-            let ciContext = CIContext(options: nil)
-            self.imageView.contentMode = UIView.ContentMode.scaleAspectFit
-             imageView.image = sepiaFIlteredImage
-             print("Image Shared")
         }
             
         else {
@@ -126,33 +107,8 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
             present(alert, animated: true)
             alert.addAction(action)
         }
-      
         
     }
-    
-    
-    override func convertImage () {
-
-        if imageView.image != nil {
-
-            if  let gradientImage = CIImage(image: self.imageView.image!) {
-
-                 _ = gradientImage.applyingFilter("CIBloom", parameters: [kCIInputRadiusKey: 8, kCIInputIntensityKey: 1.25])
-
-            //    let images = UIImage(ciImage: finalImage.outputImage)
-                
-              
-                
-            }
-        } else {
-            print("Sorry nil found")
-        }
-
-
-
-    }
-    
-    //COntroller Connections
     
     
     
@@ -161,11 +117,19 @@ class FilterViewController: HandlerViewController, UINavigationControllerDelegat
 //MARK: IMage Picker Delegate Methods
 extension FilterViewController : UIImagePickerControllerDelegate {
     
-    //MARK: Pick Images
+    //MDC FLoating Button Setup
+    func buttonSetup () {
+        
+        MDCFloatingActionButtonThemer.applyScheme(buttonScheme, to: floatButton)
+        floatButton.setElevation(ShadowElevation(rawValue: 6), for: .normal)
+        floatButton.setElevation(ShadowElevation(rawValue: 12), for: .highlighted)
+        floatButton.accessibilityLabel = "Add a photo"
+        
+    }
+    
+    //MARK: Select Image
     
     //Take a selfie
-    
-    
     func cameraPressed () {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             return
@@ -180,37 +144,30 @@ extension FilterViewController : UIImagePickerControllerDelegate {
         present(cameraSelector, animated: true, completion: nil)
     }
     
-    //Select From Album
+    //Select Image From Library
     func selectImageFromLibrary () {
-                let imageSelector = UIImagePickerController()
-                imageSelector.delegate = self
-                imageSelector.sourceType = .photoLibrary
-                imageSelector.allowsEditing = true
-                present(imageSelector, animated: true)
+        let imageSelector = UIImagePickerController()
+        imageSelector.delegate = self
+        imageSelector.sourceType = .photoLibrary
+        imageSelector.allowsEditing = true
+        present(imageSelector, animated: true)
     }
+
     
-    func buttonSetup () {
-        
-                MDCFloatingActionButtonThemer.applyScheme(buttonScheme, to: floatButton)
-                floatButton.setElevation(ShadowElevation(rawValue: 6), for: .normal)
-                floatButton.setElevation(ShadowElevation(rawValue: 12), for: .highlighted)
-                floatButton.accessibilityLabel = "Add a photo"
-        
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
+    {
         
         if let selectedImage = info[UIImagePickerController.InfoKey.editedImage]as? UIImage {
             //TODO: needs to go to super class
             self.imageView.autoresizingMask = UIView.AutoresizingMask(rawValue: UIView.AutoresizingMask.flexibleBottomMargin.rawValue | UIView.AutoresizingMask.flexibleHeight.rawValue | UIView.AutoresizingMask.flexibleRightMargin.rawValue | UIView.AutoresizingMask.flexibleLeftMargin.rawValue | UIView.AutoresizingMask.flexibleTopMargin.rawValue | UIView.AutoresizingMask.flexibleWidth.rawValue)
-                self.imageView.contentMode = UIView.ContentMode.scaleAspectFit
-                self.imageView.image = selectedImage
-                self.backgroundImageView.image = selectedImage
-                self.userSelctedImage = selectedImage
+            self.imageView.contentMode = UIView.ContentMode.scaleAspectFit
+            self.imageView.image = selectedImage
+            self.backgroundImageView.image = selectedImage
+            self.userSelctedImage = selectedImage
         }
-        
+            
         else{
-            print("What the hell \(NSLocalizedDescriptionKey)")
+            print("Image not resized propoerly \(NSLocalizedDescriptionKey)")
         }
         
         dismiss(animated: true, completion: nil)
@@ -229,10 +186,34 @@ extension FilterViewController : UIImagePickerControllerDelegate {
         backgroundImageView.addSubview(blurView)
     }
     
+}
+
+//Custom Haze Remove Filter
+/*
+extension FilterViewController {
+    
+   
+    
+    guard let filter = CIFilter(name: NSUserName, withInputParameters: parameters),
+    let output = filter.outputImage else {
+    throw ImageProcessor.Error.filterConfiguration(name: filterName, params: parameters)
+    }
+    
+    // Crop back to the extent if necessary
+    if shouldCrop {
+    let croppedImage = output.cropped(to: extent)
+    return croppedImage
+    } else {
+    return output
+    }
+}
+
+*/
+
+
+extension FilterViewController {
 
 }
 
-
-    
 
 
