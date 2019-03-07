@@ -12,6 +12,7 @@ import UIKit
 class ImageConverter {
     
     func convertCIImageToUIImage (image : CIImage) -> UIImage
+        
     {
         
         let context : CIContext = CIContext.init(options: nil)

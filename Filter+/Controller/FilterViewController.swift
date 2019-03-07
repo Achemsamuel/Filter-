@@ -28,6 +28,20 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var imageView: UIImageView!
     
+    //BUtton Outlets
+    @IBOutlet weak var sepiaButton: UIButton!
+    @IBOutlet weak var bloomButton: UIButton!
+    @IBOutlet weak var noirButton: UIButton!
+    @IBOutlet weak var chromeButton: UIButton!
+    @IBOutlet weak var tonalButton: UIButton!
+    @IBOutlet weak var fadeButton: UIButton!
+    @IBOutlet weak var monoButton: UIButton!
+    @IBOutlet weak var effectsInstantButton: UIButton!
+    @IBOutlet weak var effectsTransferButton: UIButton!
+    @IBOutlet weak var originalImageButton: UIButton!
+    
+    
+    
     //Life Cycle
     
     override func viewDidLoad() {
@@ -42,6 +56,10 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
         ImageBackgroundHandler()
         
         setupView()
+        
+        scrollView.contentSize = CGSize(width: 632, height: 92)
+        
+       self.sepiaButtonImage(image: self.imageView.image!)
     }
     
     //View Methods
@@ -63,6 +81,9 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
         let takePhotoAction = UIAlertAction(title: "Take a photo", style: .default) { (action) in
             print("Something hapened")
             self.cameraPressed()
+            
+    
+          
         }
         
         //Library Selected Action
@@ -71,22 +92,69 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
             print("Another Thing Happened")
             
             self.selectImageFromLibrary()
+            
         }
         present(alert, animated: true, completion: nil)
         alert.addAction(takePhotoAction)
         alert.addAction(selectImageAction)
+        
+        
+        
     }
     
     //MARK: FIlter Button Actions
-    //Sepia Button
-    @IBAction func sepiaFIlterButtonClicked(_ sender: UIButton) {
-        let image = CIImage(image: imageView.image!)
-        let filteredImage = sepiaFilterClass.applySepiaFIlter(image: image!)
-        let finalImage = convertImage.convertCIImageToUIImage(image: filteredImage)
-        self.imageView.image = finalImage
+    //Original Image Button
+    @IBAction func originalImage(_ sender: UIButton) {
+        imageView.image = self.originalImageButton.currentBackgroundImage
     }
     
-    //Another Button
+    
+    //Sepia Filter Button
+    @IBAction func sepiaFIlterButtonClicked(_ sender: UIButton) {
+        imageView.image = self.sepiaButton.currentBackgroundImage
+    }
+    
+    //Bloom Filter Button
+    @IBAction func bloomFilterButtonClicked(_ sender: UIButton) {
+        imageView.image = self.bloomButton.currentBackgroundImage
+    }
+    
+    //Noir Filter Button
+    @IBAction func noirFilterButtonClicked(_ sender: UIButton) {
+        imageView.image =  self.noirButton.currentBackgroundImage
+    }
+    
+    //Chrome Filter Button
+    @IBAction func chromeFIlterButtonClicked(_ sender: UIButton) {
+        imageView.image = self.chromeButton.currentBackgroundImage
+    }
+    
+    //Tonal Filter Button Clicked
+    @IBAction func tonalFilterButtonClicked(_ sender: UIButton) {
+        imageView.image = self.tonalButton.currentBackgroundImage
+    }
+    
+    //Fade Filter Button
+    @IBAction func fadeButtonClicked(_ sender: UIButton) {
+        imageView.image = self.fadeButton.currentBackgroundImage
+    }
+    
+    //Monochrome Filter Button
+    @IBAction func monoButtonClicked(_ sender: UIButton) {
+        imageView.image = monoButton.currentBackgroundImage
+    }
+    
+    //EffectsInstant Button
+    @IBAction func effectsInstantButtonClicked(_ sender: UIButton) {
+        imageView.image = self.effectsInstantButton.currentBackgroundImage
+    }
+    
+    //Effects Transfer Button
+    @IBAction func effectsTransferButtonClicked(_ sender: UIButton) {
+        imageView.image = self.effectsTransferButton.currentBackgroundImage
+    }
+    
+    
     
     
     
@@ -161,9 +229,24 @@ extension FilterViewController : UIImagePickerControllerDelegate {
             //TODO: needs to go to super class
             self.imageView.autoresizingMask = UIView.AutoresizingMask(rawValue: UIView.AutoresizingMask.flexibleBottomMargin.rawValue | UIView.AutoresizingMask.flexibleHeight.rawValue | UIView.AutoresizingMask.flexibleRightMargin.rawValue | UIView.AutoresizingMask.flexibleLeftMargin.rawValue | UIView.AutoresizingMask.flexibleTopMargin.rawValue | UIView.AutoresizingMask.flexibleWidth.rawValue)
             self.imageView.contentMode = UIView.ContentMode.scaleAspectFit
+            
+            //Set Images
             self.imageView.image = selectedImage
             self.backgroundImageView.image = selectedImage
             self.userSelctedImage = selectedImage
+            self.originalImage(image: selectedImage)
+            self.sepiaButtonImage(image: selectedImage)
+            self.bloomButtonImage(image: selectedImage)
+            self.noirButtomImage(image: selectedImage)
+            self.chromeButonImage(image: selectedImage)
+            self.tonalButtonImage(image: selectedImage)
+            self.fadeButtonImage(image: selectedImage)
+            //self.monochromeButtonImage(image: selectedImage)
+            self.comicFilter(image: selectedImage)
+            self.effectInstant(image: selectedImage)
+            self.effectTransfer(image: selectedImage)
+            
+            
         }
             
         else{
@@ -211,9 +294,90 @@ extension FilterViewController {
 */
 
 
+//MARK: Button IMages Setup
 extension FilterViewController {
+    
+    func originalImage (image : UIImage) {
+      
+        originalImageButton.setBackgroundImage(image, for: .normal)
+    }
 
+    func sepiaButtonImage (image : UIImage) {
+        
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: convertedImage!.applyingFilter("CISepiaTone", parameters: [kCIInputIntensityKey: 0.5]))
+        sepiaButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    func bloomButtonImage (image : UIImage) {
+        
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIBloom", parameters: [kCIInputRadiusKey: 8, kCIInputIntensityKey: 1.25]))!)
+        bloomButton.setBackgroundImage(buttonImage, for: .normal)
+        
+    }
+    
+    func noirButtomImage (image : UIImage) {
+        
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIPhotoEffectNoir"))!)
+        noirButton.setBackgroundImage(buttonImage, for: .normal)
+        
+    }
+    
+    func chromeButonImage (image : UIImage) {
+      
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIPhotoEffectChrome"))!)
+        chromeButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    func tonalButtonImage (image : UIImage) {
+      
+        let converetedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (converetedImage?.applyingFilter("CIPhotoEffectTonal"))!)
+        tonalButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    func fadeButtonImage (image: UIImage) {
+      
+        let convertedImage = CIImage(image : image )
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIPhotoEffectFade"))!)
+        fadeButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    func monochromeButtonImage (image : UIImage) {
+      
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIColorMonochrome", parameters: [kCIInputIntensityKey: 0.5]))!)
+        chromeButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    func effectInstant (image : UIImage) {
+      
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIPhotoEffectInstant"))!)
+        effectsInstantButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    func effectTransfer (image: UIImage) {
+      
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIPhotoEffectTransfer"))!)
+        effectsTransferButton.setBackgroundImage(buttonImage, for: .normal)
+    }
+    
+    
+    func comicFilter (image : UIImage) {
+        
+        let convertedImage = CIImage(image: image)
+        let buttonImage = UIImage(ciImage: (convertedImage?.applyingFilter("CIComicEffect"))!)
+        monoButton.setBackgroundImage(buttonImage, for: .normal)
+        
+    }
+    
+    
+    
+    
 }
-
-
 
