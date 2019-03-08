@@ -20,9 +20,7 @@
 		A54A0F21222D707800960BEE /* ImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54A0F20222D707800960BEE /* ImageConverter.swift */; };
 		A54A0F23222DC50600960BEE /* HazeRemovalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54A0F22222DC50600960BEE /* HazeRemovalFilter.swift */; };
 		A54A0F25222DD42F00960BEE /* CustomFiltersVendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54A0F24222DD42F00960BEE /* CustomFiltersVendor.swift */; };
-		A5E8D0DF222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E8D0DE222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift */; };
-		A5E8D0E3222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E8D0E2222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift */; };
-		A5F6B92B222B040D009373FB /* ChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F6B92A222B040D009373FB /* ChildViewController.swift */; };
+		A5B252492231A3AB000AFE17 /* HueAdjustmentControlClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B252482231A3AB000AFE17 /* HueAdjustmentControlClass.swift */; };
 		F84B120FFEFE3532B07BA84B /* Pods_Filter_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B0F38611477DEB2AF84850B /* Pods_Filter_.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,9 +64,7 @@
 		A54A0F20222D707800960BEE /* ImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConverter.swift; sourceTree = "<group>"; };
 		A54A0F22222DC50600960BEE /* HazeRemovalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HazeRemovalFilter.swift; sourceTree = "<group>"; };
 		A54A0F24222DD42F00960BEE /* CustomFiltersVendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFiltersVendor.swift; sourceTree = "<group>"; };
-		A5E8D0DE222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterEffectsControlCollectionViewCell.swift; sourceTree = "<group>"; };
-		A5E8D0E2222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorEffecsControlCollectionViewCell.swift; sourceTree = "<group>"; };
-		A5F6B92A222B040D009373FB /* ChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildViewController.swift; sourceTree = "<group>"; };
+		A5B252482231A3AB000AFE17 /* HueAdjustmentControlClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueAdjustmentControlClass.swift; sourceTree = "<group>"; };
 		C6D868563CFFC7986CD2D097 /* Pods-Filter+UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Filter+UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Filter+UITests/Pods-Filter+UITests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA9C65EEE61A2A7503A3E604 /* Pods-Filter+.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Filter+.release.xcconfig"; path = "Pods/Target Support Files/Pods-Filter+/Pods-Filter+.release.xcconfig"; sourceTree = "<group>"; };
 		F07D1BB6DD80392751021EFA /* Pods_Filter_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Filter_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,11 +147,10 @@
 		A536AF562227ECC100750284 /* Filter+ */ = {
 			isa = PBXGroup;
 			children = (
+				A536AF572227ECC100750284 /* AppDelegate.swift */,
 				A54A0F1F222D706300960BEE /* Helpers */,
 				A54A0F1C222C585300960BEE /* Filters_ */,
-				A5E8D0E4222C2B3800F518E9 /* Filters */,
 				A536AF862227ED5400750284 /* Controller */,
-				A536AF572227ECC100750284 /* AppDelegate.swift */,
 				A536AF5B2227ECC100750284 /* Main.storyboard */,
 				A536AF5E2227ECC200750284 /* Assets.xcassets */,
 				A536AF602227ECC200750284 /* LaunchScreen.storyboard */,
@@ -185,7 +180,6 @@
 		A536AF862227ED5400750284 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A5F6B929222B03F8009373FB /* Child Container Controller */,
 				A536AF872227ED6C00750284 /* FilterViewController.swift */,
 			);
 			path = Controller;
@@ -197,6 +191,7 @@
 				A54A0F1D222C588900960BEE /* FiltersGroup.swift */,
 				A54A0F22222DC50600960BEE /* HazeRemovalFilter.swift */,
 				A54A0F24222DD42F00960BEE /* CustomFiltersVendor.swift */,
+				A5B252482231A3AB000AFE17 /* HueAdjustmentControlClass.swift */,
 			);
 			path = Filters_;
 			sourceTree = "<group>";
@@ -207,39 +202,6 @@
 				A54A0F20222D707800960BEE /* ImageConverter.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		A5E8D0DD222C023500F518E9 /* FIlterEffectsControlCollectionCell */ = {
-			isa = PBXGroup;
-			children = (
-				A5E8D0DE222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift */,
-			);
-			path = FIlterEffectsControlCollectionCell;
-			sourceTree = "<group>";
-		};
-		A5E8D0E1222C02CE00F518E9 /* ColorFilterEffectsCollectionCell */ = {
-			isa = PBXGroup;
-			children = (
-				A5E8D0E2222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift */,
-			);
-			path = ColorFilterEffectsCollectionCell;
-			sourceTree = "<group>";
-		};
-		A5E8D0E4222C2B3800F518E9 /* Filters */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Filters;
-			sourceTree = "<group>";
-		};
-		A5F6B929222B03F8009373FB /* Child Container Controller */ = {
-			isa = PBXGroup;
-			children = (
-				A5F6B92A222B040D009373FB /* ChildViewController.swift */,
-				A5E8D0E1222C02CE00F518E9 /* ColorFilterEffectsCollectionCell */,
-				A5E8D0DD222C023500F518E9 /* FIlterEffectsControlCollectionCell */,
-			);
-			path = "Child Container Controller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -472,15 +434,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5E8D0E3222C02EF00F518E9 /* ColorEffecsControlCollectionViewCell.swift in Sources */,
 				A54A0F21222D707800960BEE /* ImageConverter.swift in Sources */,
 				A536AF882227ED6C00750284 /* FilterViewController.swift in Sources */,
 				A54A0F1E222C588900960BEE /* FiltersGroup.swift in Sources */,
 				A536AF582227ECC100750284 /* AppDelegate.swift in Sources */,
-				A5F6B92B222B040D009373FB /* ChildViewController.swift in Sources */,
 				A54A0F23222DC50600960BEE /* HazeRemovalFilter.swift in Sources */,
+				A5B252492231A3AB000AFE17 /* HueAdjustmentControlClass.swift in Sources */,
 				A54A0F25222DD42F00960BEE /* CustomFiltersVendor.swift in Sources */,
-				A5E8D0DF222C025700F518E9 /* FilterEffectsControlCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

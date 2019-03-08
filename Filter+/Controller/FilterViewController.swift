@@ -10,8 +10,11 @@ import UIKit
 import MaterialComponents
 
 class FilterViewController: UIViewController, UINavigationControllerDelegate {
+   
     
-    //MARK: Variables Setup
+    /*
+    MARK: Variable Declarations
+ */
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -20,9 +23,56 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
     let buttonScheme = MDCButtonScheme()
     var userSelctedImage = UIImage()
     
+    ////////
+//    let defaultHueValue : Float = 130
+//    let hueRange : Float = 255
+    /////////
+    
     //Class Connections
     let sepiaFilterClass = Sepia()
     let convertImage = ImageConverter()
+    let hueAdjustmentControlClass = HueAdjustmentControlClass()
+    
+    
+    /*
+    //App Life Cycle
+   */
+    
+    override func viewDidLoad() {
+        viewDidLayoutSubviews()
+        
+        scrollView.contentSize.width = 500
+        backgroundImageView.image = imageView.image
+        
+        imagePlaceHolder.isHidden = true
+        // Do any additional setup after loading the view.
+        buttonSetup()
+        ImageBackgroundHandler()
+        
+        setupView()
+        
+        scrollView.contentSize = CGSize(width: 632, height: 92)
+        
+        self.sepiaButtonImage(image: self.imageView.image!)
+    }
+    
+    //View Methods
+    private func setupView () {
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+            hueValueLabel.text = NSString(format: "%.21f", hueSlider.value) as String
+            applyHueAdustmentToImage()
+    }
+    
+    
+    
+    /*
+     MARK: Outlets Set up
+ 
+ */
+    
     
     //Images Outlets
     @IBOutlet weak var backgroundImageView: UIImageView!
@@ -40,32 +90,39 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var effectsTransferButton: UIButton!
     @IBOutlet weak var originalImageButton: UIButton!
     
+    //Slider Outlet
+    @IBOutlet var hueSlider: UISlider!
+    
+    //HueValue Label Outlet
+    @IBOutlet weak var hueValueLabel: UILabel!
     
     
-    //Life Cycle
-    
-    override func viewDidLoad() {
-        viewDidLayoutSubviews()
-        
-        scrollView.contentSize.width = 500
-        backgroundImageView.image = imageView.image
-        
-        imagePlaceHolder.isHidden = true
-        // Do any additional setup after loading the view.
-        buttonSetup()
-        ImageBackgroundHandler()
-        
-        setupView()
-        
-        scrollView.contentSize = CGSize(width: 632, height: 92)
-        
-       self.sepiaButtonImage(image: self.imageView.image!)
+    //Hue Slider Value Changed
+    @IBAction func hueSliderValueChanged(_ sender: UISlider) {
+        hueValueLabel.text = NSString(format: "%.21f", hueSlider.value) as String
+        applyHueAdustmentToImage()
     }
     
-    //View Methods
-    private func setupView () {
+    
+    //Greyscale Switch Outlet
+    @IBOutlet var switchToGreyscale: UISwitch!
+    
+    //Greyscale Switch State Action
+    @IBAction func greyscaleSwitchStateChanged(_ sender: UISwitch) {
         
+        if switchToGreyscale.isOn {
+          hueScaleImageView.image = UIImage(named: "greyScale")
+        } else {
+                hueScaleImageView.image = UIImage(named: "hueScale")
+        }
+        applyHueAdustmentToImage()
     }
+    
+    
+    
+    //HueScale Image Outlet
+    @IBOutlet var hueScaleImageView: UIImageView!
+    
     
     //Text Placeholder Outlet
     @IBOutlet weak var imagePlaceHolder: UILabel!
@@ -83,8 +140,9 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
             self.cameraPressed()
             
     
-          
         }
+        
+        
         
         //Library Selected Action
         let selectImageAction = UIAlertAction(title: "Select From Album", style: .default) { (action) in
@@ -102,8 +160,13 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
         
     }
     
-    //MARK: FIlter Button Actions
-    //Original Image Button
+    /*
+    
+    MARK: FIlter Button Actions
+ 
+ */
+    
+    //  Original Image Button
     @IBAction func originalImage(_ sender: UIButton) {
         imageView.image = self.originalImageButton.currentBackgroundImage
     }
@@ -156,15 +219,12 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
     
     
     
-    
-    
-    
     //Share Button Method
     @IBAction func shareButtonPressed(_ sender: UIBarButtonItem) {
         
         if imageView.image != nil {
-            
-            
+                let activityController = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
+                present(activityController, animated: true, completion: nil)
         }
             
         else {
@@ -182,7 +242,12 @@ class FilterViewController: UIViewController, UINavigationControllerDelegate {
     
 }
 
-//MARK: IMage Picker Delegate Methods
+/*
+ 
+    MARK: IMage Picker Delegate Methods
+ 
+ */
+
 extension FilterViewController : UIImagePickerControllerDelegate {
     
     //MDC FLoating Button Setup
@@ -293,8 +358,12 @@ extension FilterViewController {
 
 */
 
+/*
 
-//MARK: Button IMages Setup
+    MARK: Button IMages Setup
+ 
+ */
+
 extension FilterViewController {
     
     func originalImage (image : UIImage) {
@@ -377,7 +446,86 @@ extension FilterViewController {
     }
     
     
-    
-    
 }
+
+
+
+/*
+ MARK: Hue Adjustment Setup
+ 
+ 255 = supported max channel value
+ 64 = inputCubeDimension
+ CD = cube dimension data
+ HSV = hue saturation brightness
+ */
+
+extension FilterViewController {
+
+    func applyHueAdustmentToImage () {
+        
+        let defaultHueValue: Float = 128
+        let hueRange: Float = 180
+        let image = CIImage(image: imageView.image!)
+        
+        let coreHueAngle: Float = defaultHueValue/255 //corehueangle
+        var userSelctedCoreHueAngle: Float = hueSlider.value //slider value for hue adjustment
+        let minHueAngle: Float = (defaultHueValue - hueRange/2.0) / 255
+        let maxHueAngle: Float = (defaultHueValue + hueRange/2.0) / 255
+        let hueAdjustment = coreHueAngle - userSelctedCoreHueAngle
+        if userSelctedCoreHueAngle == 0 && !switchToGreyscale.isOn {
+            userSelctedCoreHueAngle = 1 //Will display an overlay of dominant red color
+        }
+        let cubeDimension = 64
+        var cubeData = [Float](repeating: 0, count: cubeDimension * cubeDimension * cubeDimension * 4)
+        var rgb: [Float] = [0, 0, 0]
+        var hsv: (h : Float, s : Float, v : Float)
+        var newRGB: (r : Float, g : Float, b : Float)
+        var offset = 0
+        for z in 0 ..< cubeDimension {
+            rgb[2] = Float(z) / Float(cubeDimension) // blue value
+            for y in 0 ..< cubeDimension {
+                rgb[1] = Float(y) / Float(cubeDimension) // green value
+                for x in 0 ..< cubeDimension {
+                    rgb[0] = Float(x) / Float(cubeDimension) // red value
+                    hsv = hueAdjustmentControlClass.RGBToHSV(r: rgb[0], g: rgb[1], b: rgb[2])
+                    if hsv.h < minHueAngle || hsv.h > maxHueAngle {
+                        newRGB.r = rgb[0]
+                        newRGB.g = rgb[1]
+                        newRGB.b = rgb[2]
+                    } else {
+                        if switchToGreyscale.isOn {
+                            hsv.s = 0
+                            hsv.v = hsv.v - hueAdjustment
+                        } else {
+                            hsv.h = userSelctedCoreHueAngle == 1 ? 0 : hsv.h - hueAdjustment //force red if slider angle is 255
+                        }
+                        newRGB = hueAdjustmentControlClass.HSVToRGB(h: hsv.h, s:hsv.s, v:hsv.v)
+                    }
+                    cubeData[offset] = newRGB.r
+                    cubeData[offset+1] = newRGB.g
+                    cubeData[offset+2] = newRGB.b
+                    cubeData[offset+3] = 1.0
+                    offset += 4
+                }
+            }
+        }
+        let b = cubeData.withUnsafeBufferPointer { Data(buffer: $0) }
+        let data = b as NSData
+        let colorCube = CIFilter(name: "CIColorCube")!
+        colorCube.setValue(cubeDimension, forKey: "inputCubeDimension")
+        colorCube.setValue(data, forKey: "inputCubeData")
+        colorCube.setValue(image, forKey: kCIInputImageKey)
+        if let outImage = colorCube.outputImage {
+            let context = CIContext(options: nil)
+            let outputImageRef = context.createCGImage(outImage, from: outImage.extent)
+            imageView.image = UIImage(cgImage: outputImageRef!)
+        }
+    
+        
+        
+    }
+
+}
+
+
 
