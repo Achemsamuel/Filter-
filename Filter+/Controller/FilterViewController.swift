@@ -295,7 +295,7 @@ extension FilterViewController : UIImagePickerControllerDelegate {
             self.imageView.autoresizingMask = UIView.AutoresizingMask(rawValue: UIView.AutoresizingMask.flexibleBottomMargin.rawValue | UIView.AutoresizingMask.flexibleHeight.rawValue | UIView.AutoresizingMask.flexibleRightMargin.rawValue | UIView.AutoresizingMask.flexibleLeftMargin.rawValue | UIView.AutoresizingMask.flexibleTopMargin.rawValue | UIView.AutoresizingMask.flexibleWidth.rawValue)
             self.imageView.contentMode = UIView.ContentMode.scaleAspectFit
             
-            //Set Images
+            //Set Filter Button Images
             self.imageView.image = selectedImage
             self.backgroundImageView.image = selectedImage
             self.userSelctedImage = selectedImage
