@@ -1,4 +1,4 @@
-# Filter-
+# Image Filter
 An image processing application. 
 
 Takes an image from the target device. 
